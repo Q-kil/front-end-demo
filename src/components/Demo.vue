@@ -13,6 +13,11 @@
         <a href class="logo"></a>
       </div>
     </div>
+    <div class="traffic-light">
+      <h4>红绿灯</h4>
+      <p>绿灯三秒黄灯一秒红灯两秒</p>
+      <div id="light" :style="{background: lightBackground}"></div>
+    </div>
   </div>
 </template>
 
@@ -20,7 +25,30 @@
 export default {
   name: 'Demo',
   data () {
-    return {}
+    return {
+      lightBackground: 'green'
+    }
+  },
+  created() {
+    this.main();
+  },
+  methods: {
+    sleep(duration) {
+      return new Promise(resolve => {
+        setTimeout(resolve, duration);
+      });
+    },
+    async changeColor(duration, color) {
+      this.lightBackground = color;
+      await this.sleep(duration);
+    },
+    async main() {
+      while(true) {
+        await this.changeColor(3000, 'green');
+        await this.changeColor(1000, 'yellow');
+        await this.changeColor(2000, 'red');
+      }
+    }
   }
 }
 </script>
@@ -76,6 +104,14 @@ export default {
         -webkit-transform: translate3d(55px, 0, 0);
         transform: translate3d(55px, 0, 0);
       }
+    }
+  }
+  .traffic-light {
+    #light {
+      width: 100px;
+      height: 100px;
+      border-radius: 50%;
+      background: green;
     }
   }
 }
